@@ -8,16 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
-import static com.hcsc.adc.mylibrary.AndroidLibActivity.EXTRA_JOKE;
 
 public class FirstFragment extends Fragment {
 
-    private TextView mTextView;
-    private static final String TAG = FirstFragment.class.getSimpleName();
+    public static final String TAG = FirstFragment.class.getSimpleName();
+
+    public FirstFragment() {
+    }
 
     @Override
     public View onCreateView(
@@ -25,35 +23,29 @@ public class FirstFragment extends Fragment {
             Bundle savedInstanceState
     ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first, container, false);
-    }
+        View root = inflater.inflate(R.layout.fragment_first, container, false);
 
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-        view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_SecondFragment);
-            }
-        });
-
+        Log.i(TAG, "onCreateView: INSIDE ANDROID LIBRARY FRAGMENT");
         //Get joke pass from Java lib
         Intent intent = getActivity().getIntent();
 
         //lets check intent
         if(Intent.ACTION_SEND.equals(intent.getAction()) && intent.getType() != null){
-            String jokeStr = intent.getStringExtra(Intent.EXTRA_TEXT);
+            String jokeStr = intent.getStringExtra(AndroidLibActivity.EXTRA_JOKE);
+            Log.i(TAG, "onCreateView: AFTER ACTION SEND  WITH JOKE " + jokeStr);
 
-            TextView txtView =  (TextView) view.findViewById(R.id.textview_first);
-            txtView.setText(jokeStr);
+            TextView txtView =  (TextView) root.findViewById(R.id.textview_first);
+
+            if(jokeStr != null && jokeStr.length() != 0){
+                Log.i(TAG, "onCreateView: inside joke if check length " + jokeStr.length());
+                txtView.setText(jokeStr);
+            }
+
         } else {
             Log.i(TAG, "onViewCreated: Empty intent");
         }
-       
 
-        
+        return root;
     }
+
 }

@@ -1,37 +1,28 @@
 package com.hcsc.adc.mylibrary;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.view.View;
-import android.widget.TextView;
 
 public class AndroidLibActivity extends AppCompatActivity {
 
     public static final String EXTRA_JOKE = "AndroidLibActivity";
+    private final static String TAG = AndroidLibActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        Log.i(TAG, "onCreate: Android Library Now display the joke");
+        Intent intent = getIntent();
 
+        //lets check intent
+            String jokeStr = intent.getStringExtra(AndroidLibActivity.EXTRA_JOKE);
+        Log.i(TAG, "onCreate: here is the joke.." + jokeStr);
 
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
 }

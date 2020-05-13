@@ -22,7 +22,7 @@ public class MainActivityFragment extends Fragment {
     private JavaJokes mJavaJokes;
     private Button javaBtn;
     private String jokes;
-    private static final String TAG = MainActivityFragment.class.getSimpleName();
+    public static final String TAG = MainActivityFragment.class.getSimpleName();
 
     public MainActivityFragment() {
     }
@@ -38,7 +38,7 @@ public class MainActivityFragment extends Fragment {
         javaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).tellJoke(v);
+                ((MainActivity)getActivity()).tellJoke();
                 Log.i(TAG, "onClick: button clicked...");
             }
         });

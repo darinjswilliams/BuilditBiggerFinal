@@ -1,4 +1,6 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="stand_joke_size">30dp</dimen>
+    <dimen name="padding_size8dp">8dp</dimen>
+    <dimen name="title_size20sp">20sp</dimen>
 </resources>

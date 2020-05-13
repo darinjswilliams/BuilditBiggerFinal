@@ -4,9 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -19,14 +19,23 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 import java.io.IOException;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 
 public class MainActivity extends AppCompatActivity implements jokeInterface {
+
+    private FragmentManager fragmentManager;
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fragmentManager = getSupportFragmentManager();
+        launchFragment(new MainActivityFragment(), MainActivityFragment.TAG, R.id.fragment_contaier);
+
     }
 
 
@@ -34,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements jokeInterface {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         return true;
     }
 
@@ -52,7 +62,14 @@ public class MainActivity extends AppCompatActivity implements jokeInterface {
         return super.onOptionsItemSelected(item);
     }
 
-    public void tellJoke(View view) {
+    public void launchFragment(Fragment fragment, String tag, int containier) {
+
+        fragmentManager.beginTransaction()
+                .replace(containier, fragment, tag)
+                .commit();
+    }
+
+    public void tellJoke() {
         new EndpointsAsyncTask().execute(getApplicationContext());
     }
 
@@ -65,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements jokeInterface {
 class EndpointsAsyncTask extends AsyncTask<Context, Void, String> implements jokeInterface {
     private static MyApi myApiService = null;
     private Context context;
-
+    private static final String TAG = EndpointsAsyncTask.class.getSimpleName();
 
     @Override
     protected String doInBackground(Context... params) {
@@ -90,6 +107,7 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> implements jok
         context = params[0];
 
         try {
+            Log.i(TAG, "doInBackground: ");
             return myApiService.sayHi().execute().getData();
         } catch (IOException e) {
             return e.getMessage();
@@ -98,11 +116,12 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> implements jok
 
     @Override
     protected void onPostExecute(String result) {
-
+        Log.i(TAG, "onPostExecute: here is the joke " + result);
         if (isNullOrEmpty(result)) {
             Intent mIntent = new Intent(context, AndroidLibActivity.class);
             mIntent.setAction(Intent.ACTION_SEND);
-            mIntent.putExtra(Intent.EXTRA_TEXT, result);
+            mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mIntent.putExtra(AndroidLibActivity.EXTRA_JOKE, result);
             mIntent.setType(Constants.PLAIN_TEXT);
             Intent shareIntent = Intent.createChooser(mIntent, null);
             startJokeIntent(mIntent);
@@ -126,6 +145,8 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> implements jok
 
     @Override
     public void startJokeIntent(Intent intent) {
+
+
         context.startActivity(intent);
     }
 }
