@@ -1,8 +1,8 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_first_id"
-    android:name="com.hcsc.adc.mylibrary.FirstFragment"
+    android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:layout="@layout/fragment_first" />
-
+    android:name="com.hcsc.adc.mylibrary.JokeFragment"
+    tools:layout="@layout/fragment_joke">
+</fragment>

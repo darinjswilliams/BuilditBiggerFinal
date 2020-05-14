@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FirstFragment">
+    tools:context=".JokeFragment">
 
     <TextView
         android:id="@+id/textview_first"
         android:layout_width="284dp"
         android:layout_height="126dp"
         android:layout_marginTop="264dp"
-        android:text="@string/hello_first_fragment"
+        android:textSize="25sp"
+        tools:text="@string/android_lib_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"

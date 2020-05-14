@@ -13,7 +13,7 @@ import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-import com.hcsc.adc.mylibrary.AndroidLibActivity;
+import com.hcsc.adc.mylibrary.JokeActivity;
 import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements jokeInterface {
 
         fragmentManager = getSupportFragmentManager();
         launchFragment(new MainActivityFragment(), MainActivityFragment.TAG, R.id.fragment_contaier);
-
+//        new EndpointsAsyncTask().execute(getApplicationContext());
     }
 
 
@@ -108,7 +108,9 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> implements jok
 
         try {
             Log.i(TAG, "doInBackground: ");
-            return myApiService.sayHi().execute().getData();
+            String jokeStr = myApiService.sayHi().execute().getData();
+            Log.i(TAG, "doInBackground: data "  + jokeStr);
+            return jokeStr;
         } catch (IOException e) {
             return e.getMessage();
         }
@@ -118,12 +120,10 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> implements jok
     protected void onPostExecute(String result) {
         Log.i(TAG, "onPostExecute: here is the joke " + result);
         if (isNullOrEmpty(result)) {
-            Intent mIntent = new Intent(context, AndroidLibActivity.class);
-            mIntent.setAction(Intent.ACTION_SEND);
+            Intent mIntent = new Intent(context, JokeActivity.class);
+//            mIntent.setAction(Intent.ACTION_SEND);
             mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mIntent.putExtra(AndroidLibActivity.EXTRA_JOKE, result);
-            mIntent.setType(Constants.PLAIN_TEXT);
-            Intent shareIntent = Intent.createChooser(mIntent, null);
+            mIntent.putExtra(JokeActivity.EXTRA_JOKE, result);
             startJokeIntent(mIntent);
         } else {
             displayToast();
@@ -145,8 +145,6 @@ class EndpointsAsyncTask extends AsyncTask<Context, Void, String> implements jok
 
     @Override
     public void startJokeIntent(Intent intent) {
-
-
         context.startActivity(intent);
     }
 }

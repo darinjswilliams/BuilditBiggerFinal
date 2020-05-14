@@ -8,4 +8,5 @@
     <string name="text_jokes">Jokes Android Lib</string>
     <string name="joke_tile">Jokes - Display from Android Library</string>
     <string name="default_text">Android Library</string>
+    <string name="android_lib_text">Android Library Information</string>
 </resources>
