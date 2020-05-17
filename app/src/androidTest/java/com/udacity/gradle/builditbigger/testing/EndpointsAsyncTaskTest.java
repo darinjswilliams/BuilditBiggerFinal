@@ -18,6 +18,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4ClassRunner.class)
 public class EndpointsAsyncTaskTest {
@@ -35,7 +36,8 @@ public class EndpointsAsyncTaskTest {
     public void setUp() {
 
         //lets get a context
-        mConext = InstrumentationRegistry.getInstrumentation().getContext();
+        mConext =  InstrumentationRegistry.getInstrumentation().getTargetContext();
+
         assertNotNull(mConext);
 
         checkBackGround = null;
@@ -43,6 +45,9 @@ public class EndpointsAsyncTaskTest {
         //Reference Endpoint Task
         mEndpointsAsysTask = new EndpointsAsyncTask();
         assertNotNull(mEndpointsAsysTask);
+
+        //Set Countdown
+        mSignal = new CountDownLatch(1);
     }
 
 
@@ -67,9 +72,7 @@ public class EndpointsAsyncTaskTest {
         String jokeReturn = null;
 
         try {
-            mSignal = new CountDownLatch(1);
-
-//            mEndpointsAsysTask.execute(mConext);
+            mSignal = new CountDownLatch(2);
 
             jokeReturn  = mIntent.getStringExtra("AndroidLibActivity");
             mSignal.await(8, TimeUnit.SECONDS);
@@ -81,6 +84,27 @@ public class EndpointsAsyncTaskTest {
         }
 
 
+    }
+
+    @Test
+    public void testPostAsyncAfterResponse(){
+
+        EndpointsAsyncTask postEndpointsAsyncTask = new EndpointsAsyncTask() {
+
+            @Override
+            public void onPostExecute(String result) {
+              assertNotNull(result);
+              assertTrue(result.length() > 0);
+              mSignal.countDown();
+            }
+        };
+
+        postEndpointsAsyncTask.execute(mConext);
+        try {
+            mSignal.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -17,10 +17,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        fragmentManager = getSupportFragmentManager();
-//        launchFragment(new MainActivityFragment(), MainActivityFragment.TAG, R.id.fragment_contaier);
-////        new EndpointsAsyncTask().execute(getApplicationContext());
     }
 
 
@@ -46,13 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-//    public void launchFragment(Fragment fragment, String tag, int containier) {
-//
-//        fragmentManager.beginTransaction()
-//                .replace(containier, fragment, tag)
-//                .commit();
-//    }
 
     public void tellJoke() {
         new EndpointsAsyncTask().execute(getApplicationContext());
