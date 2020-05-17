@@ -4,6 +4,8 @@ apply plugin: 'com.google.cloud.tools.endpoints-framework-client'
 buildscript {
     repositories {
         jcenter()
+        google()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.google.cloud.tools:endpoints-framework-gradle-plugin:1.0.3'
@@ -13,6 +15,12 @@ buildscript {
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
+
+    // Gradle automatically adds 'android.test.runner' as a dependency.
+    useLibrary 'android.test.runner'
+
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
 
     defaultConfig {
         applicationId "com.udacity.gradle.builditbigger"
@@ -30,11 +38,40 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        shrunk{
+            minifyEnabled true
+            shrinkResources true
+        }
     }
+
+    // Specifies one flavor dimension.
+    flavorDimensions "version"
+    productFlavors {
+        free {
+            // Assigns this product flavor to the "version" flavor dimension.
+            // If you are using only one dimension, this property is optional,
+            dimension "version"
+            applicationId "com.udacity.gradle.builditbigger.free"
+            versionNameSuffix "-free"
+        }
+        paid {
+            dimension "version"
+            applicationId "com.udacity.gradle.builditbigger.paid"
+            versionNameSuffix "-paid"
+
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+    }
+
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     endpointsServer project(path: ':backend', configuration: 'endpoints')
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.gms:play-services-ads:19.1.0'
@@ -47,10 +84,18 @@ dependencies {
     })
 
     testImplementation 'junit:junit:4.13'
+    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation 'org.mockito:mockito-core:1.10.19'
 
     //JavaJokes
     implementation project(':javaJokeslib')
 
     //AndroidLibrary
     implementation project(':androidjokesLib')
+    implementation 'junit:junit:4.13'
+
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+
+
 }
