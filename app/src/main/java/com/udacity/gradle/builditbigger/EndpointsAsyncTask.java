@@ -43,12 +43,12 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> impleme
         context = params[0];
 
         try {
-            Log.i(TAG, "doInBackground: ");
             String jokeStr = myApiService.sayHi().execute().getData();
             Log.i(TAG, "doInBackground: data "  + jokeStr);
             return jokeStr;
         } catch (IOException e) {
-            return e.getMessage();
+            Log.i(TAG, "doInBackground: " + e.getLocalizedMessage());
+            return null;
         }
     }
 
@@ -57,7 +57,6 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> impleme
         Log.i(TAG, "onPostExecute: here is the joke " + result);
         if (isNullOrEmpty(result)) {
             Intent mIntent = new Intent(context, JokeActivity.class);
-//            mIntent.setAction(Intent.ACTION_SEND);
             mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             mIntent.putExtra(JokeActivity.EXTRA_JOKE, result);
             startJokeIntent(mIntent);

@@ -74,9 +74,14 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     endpointsServer project(path: ':backend', configuration: 'endpoints')
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    //Add the dependency for ads to the free paid version only of the implementation
+    //Add the dependency for ads to the free paid version of implementation and not Paid
     freeImplementation 'com.google.android.gms:play-services-ads:19.1.0'
-    implementation 'com.google.api-client:google-api-client:1.23.0'
+
+    //Exclude Guava Dependency
+    implementation ('com.google.api-client:google-api-client:1.23.0'){
+        exclude group: 'com.google.guava', module: 'guava-jdk5'
+    }
+
     implementation 'com.google.http-client:google-http-client-android:1.23.0'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
 
@@ -89,7 +94,7 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:1.10.19'
 
     //JavaJokes
-    implementation project(':javaJokeslib')
+    //implementation project(':javaJokeslib')
 
     //AndroidLibrary
     implementation project(':androidjokesLib')
